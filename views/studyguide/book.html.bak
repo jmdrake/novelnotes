@@ -1,0 +1,7 @@
+{{extend 'layout.html'}}
+<h1>{{=book}}</h1>
+<ul>
+    {{for chapter in chapters:}}
+    <li>{{=chapter.f_number}}. <a href="{{=URL('studyguide', 'chapter', vars={'chapter':chapter.f_number})}}">{{=chapter.f_title}}</a></li>
+    {{pass}}
+</ul>

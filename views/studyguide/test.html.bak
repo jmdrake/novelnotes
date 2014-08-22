@@ -1,0 +1,59 @@
+{{sidebar_enabled=True}}
+{{extend 'layout.html'}}
+    {{response.files.append(URL('static','css/skeleton.css'))
+    response.files.append(URL('static','css/superfish.css'))}}
+<script>
+$(document).ready(function(){
+  $(".results").hide();
+  $("#frm_new_question").hide();
+  $("#addquestion").click(function(){
+      $("#frm_new_question").show();
+  });
+  $(".answer_button").click(function(){
+      var useranswer = $(this).parent().find("#user_answer").val();
+      var correctanswer = $(this).parent().find("#correct_answer").val();
+      if(useranswer == correctanswer) {
+          $(this).parent().find("#correct").show();
+          $(this).parent().find("#incorrect").hide();
+      } else {
+          $(this).parent().find("#correct").hide();
+          $(this).parent().find("#incorrect").show();
+      }
+  });
+});
+</script>
+<style>
+#chapter_info {
+    overflow:scroll;
+    height: 480px;
+    padding: 10px;
+}
+#question_div {
+    overflow:scroll;
+    height: 240px;
+    padding: 10px;
+}
+#characters {
+    overflow:scroll;
+    height: 240px;
+    padding: 10px;
+}
+
+</style>
+<div style="background-color:grey">
+    <h1>Chowder</h1>
+    <div class="four columsn alpha" id="chapter_info" >
+        <h2>Chapter 2</h2>
+    </div>
+
+    <div id="notes">
+        <h2>
+            Notes
+        </h2>
+    </div>
+</div>
+<div>
+    <h3>
+        Fubar
+    </h3>
+</div>

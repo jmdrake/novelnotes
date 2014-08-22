@@ -1,0 +1,168 @@
+{{sidebar_enabled=True}}
+{{extend 'layout.html'}}
+{{response.files.append(URL('static','css/skeleton.css'))
+response.files.append(URL('static','css/superfish.css'))}}
+<style>
+#chapter_info {
+    overflow:scroll;
+    height: 480px;
+    padding: 10px;
+}
+#question_div {
+    overflow:scroll;
+    height: 480px;
+    padding: 10px;
+}
+#characters_div {
+    overflow:scroll;
+    height: 240px;
+    padding: 10px;
+    clear: both;
+}
+</style>
+<script src="{{=URL('static','js/chapter.js')}}">
+</script>
+<div >
+    <h1>{{=chapter.f_book.f_title}}</h1>
+    <div class="ten columns alpha" id="chapter_info">
+        <h2>Chapter {{=chapter.f_number}}.  {{=chapter.f_title}}</h2>
+        <div id="chapter_text">
+            {{=XML(text)}}
+        </div>
+    </div>
+
+    <div class="nine columns omega" id="notes">
+        <div id="question_div">
+            <h1>
+                Questions
+            </h1>
+            <button id="addquestion">
+            Add Question
+            </button>
+            <div id="div_new_question">
+                <form id="frm_new_question" name="frm_new_question">
+                    <input type="hidden" name="ques_chapter" id="ques_chapter" value="{{=chapter.id}}"/>
+                    <div>Prompt : <input name="ques_prompt" id="ques_prompt" class="ques_input"/></div>
+                    <div>Answer : <input name="ques_answer" id="ques_answer" class="ques_input"/></div>
+                    <div>Paragraphs : <input name="ques_paragraphs" id="ques_paragraphs" class="ques_input"/></div>
+                    <div><input type="submit"/></div>
+                </form>
+                <script>
+                    jQuery('#frm_new_question').submit(function() {
+                        ajax('{{=URL('studyguide', 'addquestion')}}', ['ques_chapter', 'ques_prompt','ques_answer','ques_paragraphs'], ':eval');
+                        return false;
+                    });
+                </script>
+            </div>
+            <div id="questions">
+                <ol id="question_list">
+                    {{for question in questions:}}
+                    <li>
+                            {{=question.f_prompt}}
+                            <input type="hidden" id="ques_id" name="ques_id" value="{{=question.id}}"/>
+                            <input type="hidden" id="correct_answer" value="{{=question.f_answer}}"/>
+                            <select id="user_answer" name="user_answer">
+                                <option value="">Choose An Answer</option>
+                                {{for answer in answers:}}
+                                <option value="{{=answer.f_answer}}">{{=answer.f_answer}}</option>
+                                {{pass}}
+                            </select>
+                            <button id="check_answer" class="answer_button">
+                                Check Answer
+                            </button>
+                            <div id="correct" class="results">Correct</div>
+                            <div id="incorrect" class="results">Incorrect</div>
+                            <button class="show_refs">
+                                References
+                            </button>
+                            <input id="paras" name="paras" type="hidden" value="{{=question.f_paragraphs}}"/>
+                    </li>
+                    {{pass}}
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="characters_div">
+    <h1>
+        Characters
+    </h1>
+    <div class="eight columns alpha" id="book_characters">
+        <h3>
+            Characters in Book
+        </h3>
+        <button id="addcharacter">
+         Add Character To Book
+        </button>
+        <div id="div_new_character">
+                <form id="frm_new_character" name="frm_new_character">
+                    <input type="hidden" name="char_chapter" id="char_chapter" value="{{=chapter.id}}"/>
+                    <input type="hidden" name="char_book" id="char_book" value="{{=chapter.f_book}}"/>
+                    <div>Name : <input name="char_name" id="char_name" class="char_input"/></div>
+                    <div>Gender : <select name="char_gender" id="char_gender">
+                        <option value=""></option><option value="Male">Male</option><option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div>Age : <input name="char_age" id="char_age" class="char_input"/></div>
+                    <div>Place of birth : <input name="char_birthplace" id="char_birthplace" class="char_input"/></div>
+                    <div>Profession : <input name="char_profession" id="char_profession" class="char_input"/></div>
+                    <div>Relations : <textarea rows = "4"cols = "40" name="char_relations" id="char_relations" class="ques_input"></textarea></div>
+                    <div>Notes : <textarea rows = "4"cols = "40" name="char_notes" id="char_notes" class="ques_input"></textarea></div>
+                    <div><input type="submit"/></div>
+                </form>
+                <script>
+                    jQuery('#frm_new_character').submit(function() {
+                        ajax('{{=URL('studyguide', 'addcharacter')}}', ['char_chapter', 'char_book','char_gender', 'char_name',
+                             'char_age', 'char_birthplace', 'char_profession', 'char_relations','char_notes'], ':eval');
+                        return false;
+                    });
+                </script>
+        </div>
+        <ol id = "book_character_list">            
+            {{for character in book_characters:}}
+            <li>
+                <div>Name : {{=character.f_name}}</div>
+                <div>Gender : {{=character.f_gender}}</div>
+                <div>Age : {{=character.f_age}}</div>
+                <div>Birthplace : {{=character.f_birthplace}}</div>
+                <div>Profession : {{=character.f_profession}}</div>
+                <div>Relations : {{=character.f_relations}}</div>
+                <div>Notes : {{=character.f_notes}}</div>
+            </li>
+            {{pass}}
+        </ol>
+
+    </div>
+    <div class="eight columns omega" id="chapter_characters">
+        <h3>
+            Characters in Chapter
+        </h3>
+        <button id="addcharacterreference">
+         Add Character To Chapter
+        </button>
+        <div id="div_new_character_reference">
+            <form id="frm_new_character_reference" name="frm_new_character_reference">
+                <select id="ref_character" name="ref_character">
+                    {{for character in book_characters:}}
+                    <option value="{{=character.id}}">{{=character.f_name}}</option>
+                    {{pass}}
+                </select>
+                <input type="Submit"/>
+                <input type="hidden" value="{{=chapter.id}}"/>
+                <script>
+                    jQuery('#frm_new_character_reference').submit(function() {
+                        ajax('{{=URL('studyguide', 'addcharacterreference')}}', ['ref_character', 'ref_chapter'], ':eval');
+                        return false;
+                    });
+                </script>
+            </form>
+        </div>
+        <ol id = "chapter_character_list">
+            {{for character in chapter_characters:}}
+            <li>
+                <div>Name : {{=character.f_character.f_name}}</div>
+            </li>
+            {{pass}}
+        </ol>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+{{extend 'layout.html'}}
+<h1>Study Guide</h1>
+<ul>
+    {{for book in books:}}
+    <li><a href="{{=URL('studyguide','book',vars={'book':book.id})}}">{{=book.f_title}}</a></li>
+    {{pass}}
+</ul>

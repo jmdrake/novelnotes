@@ -1,0 +1,7 @@
+{{extend 'layout.html'}}
+
+<h1>Novel Note Taker</h1>
+
+This app lets you review, take notes and study novels or other types of literature.
+
+To get started click the <a href="{{=URL('studyguide')}}">Study Guide</a>
